@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Old placeholder images (using new assets now)
+IMG_3228.PNG
+IMG_3229.PNG
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Claude files (local only)
+.claude/
