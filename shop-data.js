@@ -32,6 +32,60 @@ class ShopDataManager {
         }
     }
 
+    async loadFromGoogleSheets(sheetId, gid, name = 'data') {
+        try {
+            const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+            console.log(`📊 Loading ${name} from Google Sheets...`);
+            console.log(`📎 URL: ${csvUrl}`);
+
+            const response = await fetch(csvUrl);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}. Make sure the Google Sheet is publicly accessible (Share → Anyone with the link can view)`);
+            }
+
+            const csvText = await response.text();
+
+            if (!csvText || csvText.length < 10) {
+                throw new Error('Empty or invalid response from Google Sheets');
+            }
+
+            // Parse CSV using xlsx library
+            const workbook = XLSX.read(csvText, { type: 'string' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            if (!data || data.length === 0) {
+                throw new Error('No data found in Google Sheets response');
+            }
+
+            this.rawData = data;
+            this.parseData(data);
+
+            console.log(`✅ ${name} loaded from Google Sheets successfully!`);
+            console.log(`   Rows loaded: ${data.length}`);
+            console.log('   Slot Configs:', Object.keys(this.slotConfigs).length);
+            console.log('   Loot Tables:', Object.keys(this.lootTables).length);
+
+            return true;
+        } catch (error) {
+            console.error(`❌ Error loading ${name} from Google Sheets:`, error);
+            console.error(`   Sheet ID: ${sheetId}`);
+            console.error(`   Tab GID: ${gid}`);
+            console.error(`
+🔧 Troubleshooting:
+1. Make sure the Google Sheet is publicly accessible:
+   - Open: https://docs.google.com/spreadsheets/d/${sheetId}
+   - Click Share → Change to "Anyone with the link" → Viewer
+2. Check that the tab exists (gid=${gid})
+3. Try hard refresh: Ctrl+Shift+R
+4. Check browser console for detailed error messages
+            `);
+            return false;
+        }
+    }
+
     parseData(data) {
         // Skip header row
         for (let i = 1; i < data.length; i++) {

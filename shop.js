@@ -9,11 +9,16 @@ class ShopController {
     }
 
     async initialize() {
-        // Load shop data
-        const loaded = await window.shopDataManager.loadFromExcel('Daily Shop Tuning v4.xlsx');
+        // Load shop data from Google Sheets
+        // Edit the Google Sheet to update tuning: https://docs.google.com/spreadsheets/d/1jX9hiYLuL-BFTspOHJIGBuFZYowXW7uKtOnrlkeu6fw
+        const loaded = await window.shopDataManager.loadFromGoogleSheets(
+            GOOGLE_SHEETS_CONFIG.SHEET_ID,
+            GOOGLE_SHEETS_CONFIG.TABS.SHOP_TUNING,
+            'Daily Shop Tuning'
+        );
 
         if (!loaded) {
-            alert('Failed to load shop data. Please check the console for errors.');
+            alert('Failed to load shop data from Google Sheets. Please check the console for errors.');
             return;
         }
 
