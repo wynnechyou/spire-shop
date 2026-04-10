@@ -2,6 +2,14 @@
 
 A web-based interface for testing and tuning the Daily Shop system for your tower defense + merge game.
 
+## 🌐 Live Demo
+
+**https://wynnechyou.github.io/spire-shop/**
+
+Share this URL with coworkers to playtest the shop without any setup!
+
+---
+
 ## Features
 
 ✅ **Visual Shop Interface** - Matches your game's UI design  
@@ -17,12 +25,16 @@ A web-based interface for testing and tuning the Daily Shop system for your towe
 
 ## System Overview
 
-The Daily Shop uses **4 Excel files** to generate personalized offers:
+The Daily Shop uses **Excel files as live data sources** - the browser downloads and parses them in real-time:
 
-1. **Item Pricing.xlsx** - Base prices & castle-level dynamic pricing
-2. **Progression Map.xlsx** - Player unlock progression (what they have at each level)
-3. **Item Selection.xlsx** - Probability weights & purchase limits
-4. **Daily Shop Tuning.xlsx** - Legacy slot templates (being phased out)
+1. **Daily Shop Tuning v3.xlsx** - Primary data file loaded by browser
+2. **Item Pricing.xlsx** - Base prices & castle-level dynamic pricing
+3. **Progression Map.xlsx** - Player unlock progression (what they have at each level)
+4. **Item Selection.xlsx** - Probability weights & purchase limits
+
+**Architecture:** Browser downloads Excel → JavaScript parses with xlsx.js library → Shop displays data
+
+This means you can update tuning by simply editing the Excel file and pushing to Git - no code changes needed!
 
 See **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** for calculation formulas and examples.
 
@@ -30,11 +42,18 @@ See **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** for calculation formulas and ex
 
 ## Quick Start
 
-### 1. Open the Tool
+### Option 1: Use the Live Demo (Easiest)
 
-Simply open `index.html` in a web browser:
+Just visit **https://wynnechyou.github.io/spire-shop/** - no setup required!
+
+### Option 2: Run Locally
+
+Clone the repository and open in a browser:
 
 ```bash
+git clone https://github.com/wynnechyou/spire-shop.git
+cd spire-shop
+
 # Using a simple HTTP server (recommended)
 npx serve .
 
@@ -180,7 +199,9 @@ Players only see items they've unlocked:
 1. Find the item row (e.g., "Bell Tower Lv5")
 2. Edit dynamic prices (Columns N-AG for Castle 1-20)
 3. OR edit base price (Column G)
-4. Refresh browser to see changes
+4. **Save the Excel file**
+5. If testing locally: Refresh browser to see changes
+6. If updating live demo: See "Deploying Changes" section below
 
 ### Change Probability Weights
 **File:** `Item Selection.xlsx`
@@ -207,6 +228,46 @@ Players only see items they've unlocked:
 
 **Example:** Unlock Skyshot at Castle 5 instead of 7
 - Change Castle 5, Column H from 0 → 5
+
+---
+
+## Deploying Changes
+
+### Update the Live Demo
+
+When you modify Excel files or code, push changes to update the live site:
+
+```bash
+# 1. Check what you changed
+git status
+
+# 2. Stage your changes
+git add "Daily Shop Tuning v3.xlsx"  # Or whatever files you changed
+# Or stage everything: git add .
+
+# 3. Commit with a descriptive message
+git commit -m "Adjust tower prices for castle levels 10-15"
+
+# 4. Push to GitHub (live site updates in ~1 minute)
+git push
+```
+
+### Verify Deployment
+
+1. Visit https://github.com/wynnechyou/spire-shop/actions
+2. Wait for green checkmark (build complete)
+3. Visit https://wynnechyou.github.io/spire-shop/
+4. Hard refresh (Ctrl+Shift+R) to clear cache
+
+### Common Git Commands
+
+| Task | Command |
+|------|---------|
+| Check status | `git status` |
+| View changes | `git diff` |
+| See history | `git log --oneline -10` |
+| Undo last commit (keep changes) | `git reset --soft HEAD~1` |
+| Discard all local changes | `git reset --hard HEAD` ⚠️ |
 
 ---
 
@@ -240,15 +301,25 @@ Castle 4 | Total Slots: 6 | Gem: 3 | Gold: 2 | Free: 1
 
 ```
 Spire_Shop/
-├── index.html              # Main HTML structure
-├── styles.css              # UI styling
-├── shop-data.js            # Data parsing logic
-├── shop.js                 # Shop controller & UI
-├── Daily Shop Tuning.xlsx  # Tuning spreadsheet
-├── IMG_3228.PNG            # Game UI reference
-├── IMG_3229.PNG            # Game UI reference
-└── README.md               # This file
+├── index.html                    # Main HTML structure
+├── styles.css                    # UI styling
+├── shop-data.js                  # Data parsing logic (Excel reader)
+├── shop.js                       # Shop controller & UI
+├── Daily Shop Tuning v3.xlsx     # Live tuning data (loaded by browser)
+├── Item Pricing.xlsx             # Pricing tables
+├── Item Selection.xlsx           # Probability weights
+├── Progression Map.xlsx          # Player unlock progression
+├── asset_upload/                 # Game assets
+│   ├── gem.png                   # Gem currency icon
+│   └── gold.png                  # Gold currency icon
+├── README.md                     # This file
+├── PROJECT_CONTEXT.md            # Full project documentation
+├── QUICK_REFERENCE.md            # Quick lookup guide
+└── SHOP_GENERATION_SPEC.md       # Technical specification
 ```
+
+**Deployed to:** https://wynnechyou.github.io/spire-shop/  
+**Repository:** https://github.com/wynnechyou/spire-shop
 
 ---
 

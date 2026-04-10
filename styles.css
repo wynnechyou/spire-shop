@@ -145,6 +145,8 @@ body {
     display: flex;
     gap: 20px;
     position: relative;
+    overflow: hidden; /* Prevent expansion beyond container */
+    max-width: 100%;
 }
 
 /* Shopkeeper - REMOVED to allow more space for shop cards */
@@ -219,15 +221,19 @@ body {
     display: flex;
     align-items: center;
     min-height: 500px;
+    overflow: hidden; /* Prevent expansion */
+    max-width: 100%;
 }
 
 /* Shop Items Wrapper (scrollable area) */
 .shop-items-wrapper {
     flex: 1;
-    overflow-x: auto;
+    overflow-x: scroll; /* Force scrollbar to always appear */
     overflow-y: hidden;
     padding-bottom: 10px;
     position: relative;
+    user-select: none; /* Prevent text selection while dragging */
+    max-width: 100%; /* Constrain to viewport width */
 }
 
 /* Scroll Arrows */
@@ -296,22 +302,22 @@ body {
 
 .shop-items {
     display: flex;
-    gap: 20px;
-    padding: 20px 10px;
+    gap: 14px;
+    padding: 14px 7px;
     height: 100%;
     scroll-behavior: smooth;
     width: max-content;
 }
 
-/* Shop Card */
+/* Shop Card - 70% size for more cards per view */
 .shop-card {
-    min-width: 320px;
-    max-width: 320px;
-    height: 450px;
+    min-width: 224px;
+    max-width: 224px;
+    height: 315px;
     background: linear-gradient(180deg, rgba(255, 248, 220, 0.98) 0%, rgba(245, 222, 179, 0.98) 100%);
-    border: 4px solid rgba(210, 180, 140, 0.9);
-    border-radius: 20px;
-    padding: 20px;
+    border: 3px solid rgba(210, 180, 140, 0.9);
+    border-radius: 14px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -336,75 +342,75 @@ body {
 
 .quantity-badge {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
     background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
     color: white;
-    padding: 8px 16px;
-    border-radius: 12px;
+    padding: 6px 11px;
+    border-radius: 8px;
     font-weight: bold;
-    font-size: 24px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    border: 3px solid white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-size: 17px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    border: 2px solid white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .item-icon {
-    width: 120px;
-    height: 120px;
+    width: 84px;
+    height: 84px;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(200, 200, 200, 0.6) 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
-    margin: 20px 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 34px;
+    margin: 14px 0;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 .item-name {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     color: #2c3e50;
     text-align: center;
-    margin: 10px 0;
+    margin: 7px 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .item-level {
-    font-size: 18px;
+    font-size: 13px;
     color: #3498db;
     font-weight: bold;
-    margin: 5px 0;
+    margin: 4px 0;
 }
 
 .item-description {
     flex: 1;
-    font-size: 13px;
+    font-size: 9px;
     color: #34495e;
     text-align: center;
-    line-height: 1.5;
-    padding: 10px;
+    line-height: 1.4;
+    padding: 7px;
     font-family: Arial, sans-serif;
     overflow-y: auto;
 }
 
 .price-btn {
     width: 100%;
-    padding: 15px;
+    padding: 11px;
     border: none;
-    border-radius: 25px;
-    font-size: 22px;
+    border-radius: 18px;
+    font-size: 15px;
     font-weight: bold;
     color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    gap: 7px;
+    margin-top: 7px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.3s;
 }
 
@@ -431,7 +437,7 @@ body {
 }
 
 .currency-icon {
-    font-size: 24px;
+    font-size: 17px;
 }
 
 /* Controls Panel */

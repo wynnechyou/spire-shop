@@ -1,6 +1,8 @@
 # Daily Shop Project - File Summary
 
-**Last Updated**: 2026-04-09
+**Last Updated**: 2026-04-09  
+**Live Demo**: https://wynnechyou.github.io/spire-shop/  
+**Repository**: https://github.com/wynnechyou/spire-shop
 
 ---
 
@@ -264,33 +266,32 @@
 
 ## 🖼️ Asset Files
 
-### IMG_3228.PNG
-**Purpose:** Game UI reference screenshot
+### asset_upload/gem.png
+**Purpose:** Gem currency icon
 
-**Shows:**
-- Shop interface with items
-- Tower cards
-- Pricing display
+**Used In:**
+- Top-left currency display
+- Price buttons for gem offers
 
-**Used For:**
-- Visual reference for styling
-- Extracting shopkeeper image
-- UI layout inspiration
+**Status:** ✅ Active (replaces placeholder images)
 
 ---
 
-### IMG_3229.PNG
-**Purpose:** Game UI reference screenshot
+### asset_upload/gold.png
+**Purpose:** Gold currency icon
 
-**Shows:**
-- Shop with different items
-- Harvester/resource cards
-- Daily progress UI
+**Used In:**
+- Top-left currency display
+- Price buttons for gold offers
 
-**Used For:**
-- Visual reference
-- Currency icon extraction
-- Shopkeeper character image
+**Status:** ✅ Active (replaces placeholder images)
+
+---
+
+### IMG_3228.PNG & IMG_3229.PNG
+**Purpose:** Legacy game UI reference screenshots
+
+**Status:** Deprecated (kept for reference, not used in live site)
 
 ---
 
@@ -315,11 +316,11 @@ npm install
 ```
 Spire_Shop/
 │
-├── 📊 Data Files
+├── 📊 Data Files (loaded by browser)
+│   ├── Daily Shop Tuning v3.xlsx  ← Primary data file
 │   ├── Item Pricing.xlsx
 │   ├── Progression Map.xlsx
-│   ├── Item Selection.xlsx
-│   └── Daily Shop Tuning (04-08-26).xlsx
+│   └── Item Selection.xlsx
 │
 ├── 📝 Documentation
 │   ├── PROJECT_CONTEXT.md
@@ -328,32 +329,54 @@ Spire_Shop/
 │   ├── README.md
 │   └── FILES_SUMMARY.md (this file)
 │
-├── 💻 Code
+├── 💻 Code (deployed to GitHub Pages)
 │   ├── index.html
 │   ├── styles.css
 │   ├── shop-data.js
 │   └── shop.js
 │
-├── 🖼️ Assets
-│   ├── IMG_3228.PNG
-│   └── IMG_3229.PNG
+├── 🖼️ Assets (deployed to GitHub Pages)
+│   ├── asset_upload/
+│   │   ├── gem.png      ← Active currency icon
+│   │   └── gold.png     ← Active currency icon
+│   ├── IMG_3228.PNG     (deprecated)
+│   └── IMG_3229.PNG     (deprecated)
 │
-└── 📦 Dependencies
+├── 🔧 Version Control
+│   ├── .git/            (Git repository)
+│   └── .gitignore       (Excludes node_modules, etc.)
+│
+└── 📦 Dependencies (not deployed)
     ├── package.json
     ├── package-lock.json
     └── node_modules/
 ```
 
+**Live Site**: https://wynnechyou.github.io/spire-shop/  
+**GitHub**: https://github.com/wynnechyou/spire-shop
+
 ---
 
 ## 🔄 Workflow Guide
 
-### For Tuning/Balancing
+### For Tuning/Balancing (Local Testing)
 1. Open relevant Excel file (Item Pricing, Item Selection, Progression Map)
 2. Make changes
 3. Save file
 4. Refresh browser (Ctrl+R)
 5. Test in playtesting tool
+
+### For Updating Live Demo
+1. Edit Excel files or code
+2. Save changes
+3. Commit to Git:
+   ```bash
+   git add .
+   git commit -m "Update tower prices"
+   git push
+   ```
+4. Wait ~1 minute for deployment
+5. Visit https://wynnechyou.github.io/spire-shop/ (hard refresh: Ctrl+Shift+R)
 
 ### For Understanding System
 1. Start with **README.md** for overview
@@ -387,6 +410,10 @@ Spire_Shop/
 - [x] Progression Map data integration
 - [x] Item Selection data integration
 - [x] Complete documentation
+- [x] **GitHub Pages deployment** (https://wynnechyou.github.io/spire-shop/)
+- [x] **Git version control** (https://github.com/wynnechyou/spire-shop)
+- [x] **Game assets integration** (gem/gold icons)
+- [x] **Excel-as-data-source architecture**
 
 ### 🚧 In Progress
 - [ ] Implement 3-tier probability system in code

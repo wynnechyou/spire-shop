@@ -10,7 +10,7 @@ class ShopController {
 
     async initialize() {
         // Load shop data
-        const loaded = await window.shopDataManager.loadFromExcel('Daily Shop Tuning v2.xlsx');
+        const loaded = await window.shopDataManager.loadFromExcel('Daily Shop Tuning v4.xlsx');
 
         if (!loaded) {
             alert('Failed to load shop data. Please check the console for errors.');
@@ -227,6 +227,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     shopController = new ShopController();
     await shopController.initialize();
     initializeScrollButtons();
+    initializeDragScroll();
+    initializePagination();
 });
 
 // Scroll button functionality
@@ -243,7 +245,7 @@ function initializeScrollButtons() {
     console.log('✅ Scroll buttons initialized', { wrapper, leftBtn, rightBtn });
 
     // Scroll amount (width of one card + gap)
-    const scrollAmount = 340; // 320px card + 20px gap
+    const scrollAmount = 238; // 224px card + 14px gap
 
     leftBtn.addEventListener('click', () => {
         wrapper.scrollBy({
@@ -294,6 +296,124 @@ function initializeScrollButtons() {
     observer.observe(document.getElementById('shop-items'), {
         childList: true
     });
+}
+
+// Click-and-Drag Scrolling
+function initializeDragScroll() {
+    const wrapper = document.getElementById('shop-items-wrapper');
+    if (!wrapper) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    wrapper.addEventListener('mousedown', (e) => {
+        isDown = true;
+        wrapper.style.cursor = 'grabbing';
+        startX = e.pageX - wrapper.offsetLeft;
+        scrollLeft = wrapper.scrollLeft;
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+        isDown = false;
+        wrapper.style.cursor = 'grab';
+    });
+
+    wrapper.addEventListener('mouseup', () => {
+        isDown = false;
+        wrapper.style.cursor = 'grab';
+    });
+
+    wrapper.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - wrapper.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll speed multiplier
+        wrapper.scrollLeft = scrollLeft - walk;
+    });
+
+    // Set initial cursor
+    wrapper.style.cursor = 'grab';
+
+    console.log('✅ Drag scroll initialized');
+}
+
+// Pagination
+function initializePagination() {
+    const wrapper = document.getElementById('shop-items-wrapper');
+    const pageInfo = document.createElement('div');
+    pageInfo.id = 'page-info';
+    pageInfo.style.cssText = 'color: white; font-weight: bold; font-size: 14px;';
+
+    const debugInfo = document.getElementById('debug-info');
+    if (debugInfo && debugInfo.parentNode) {
+        debugInfo.parentNode.insertBefore(pageInfo, debugInfo);
+    }
+
+    const cardsPerPage = 8; // Show 8 cards per page
+    const cardWidth = 238; // 224px card + 14px gap
+
+    function updatePageInfo() {
+        const totalCards = shopController?.currentShopItems?.length || 0;
+        const totalPages = Math.ceil(totalCards / cardsPerPage);
+        const currentPage = Math.floor(wrapper.scrollLeft / (cardWidth * cardsPerPage)) + 1;
+
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+
+    // Page navigation buttons
+    const prevPageBtn = document.createElement('button');
+    prevPageBtn.textContent = '◀ Prev Page';
+    prevPageBtn.style.cssText = 'padding: 8px 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.2s;';
+    prevPageBtn.addEventListener('click', () => {
+        const pageWidth = cardWidth * cardsPerPage;
+        wrapper.scrollBy({ left: -pageWidth, behavior: 'smooth' });
+    });
+    prevPageBtn.addEventListener('mouseenter', () => {
+        prevPageBtn.style.background = '#2980b9';
+        prevPageBtn.style.transform = 'scale(1.05)';
+    });
+    prevPageBtn.addEventListener('mouseleave', () => {
+        prevPageBtn.style.background = '#3498db';
+        prevPageBtn.style.transform = 'scale(1)';
+    });
+
+    const nextPageBtn = document.createElement('button');
+    nextPageBtn.textContent = 'Next Page ▶';
+    nextPageBtn.style.cssText = 'padding: 8px 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.2s;';
+    nextPageBtn.addEventListener('click', () => {
+        const pageWidth = cardWidth * cardsPerPage;
+        wrapper.scrollBy({ left: pageWidth, behavior: 'smooth' });
+    });
+    nextPageBtn.addEventListener('mouseenter', () => {
+        nextPageBtn.style.background = '#2980b9';
+        nextPageBtn.style.transform = 'scale(1.05)';
+    });
+    nextPageBtn.addEventListener('mouseleave', () => {
+        nextPageBtn.style.background = '#3498db';
+        nextPageBtn.style.transform = 'scale(1)';
+    });
+
+    // Add to control panel
+    const controlPanel = document.querySelector('.controls-panel');
+    const paginationGroup = document.createElement('div');
+    paginationGroup.className = 'control-group';
+    paginationGroup.style.cssText = 'display: flex; gap: 10px; align-items: center;';
+    paginationGroup.appendChild(prevPageBtn);
+    paginationGroup.appendChild(pageInfo);
+    paginationGroup.appendChild(nextPageBtn);
+
+    if (controlPanel) {
+        controlPanel.insertBefore(paginationGroup, controlPanel.firstChild);
+    }
+
+    // Update page info on scroll
+    wrapper.addEventListener('scroll', updatePageInfo);
+
+    // Initial update
+    setTimeout(updatePageInfo, 300);
+
+    console.log('✅ Pagination initialized');
 }
 
 // Global functions for UI controls

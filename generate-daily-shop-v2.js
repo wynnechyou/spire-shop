@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 
 // Load all data files
-const itemSelectionWb = XLSX.readFile('Item Selection.xlsx');
+const itemSelectionWb = XLSX.readFile('Item Selection v2.xlsx');
 const itemSelectionWs = itemSelectionWb.Sheets[itemSelectionWb.SheetNames[0]];
 
 const itemPricingWb = XLSX.readFile('Item Pricing.xlsx');
@@ -362,7 +362,7 @@ const newWs = XLSX.utils.aoa_to_sheet(outputData);
 XLSX.utils.book_append_sheet(newWb, newWs, 'Sheet1');
 
 // Write file
-XLSX.writeFile(newWb, 'Daily Shop Tuning v2.xlsx');
+XLSX.writeFile(newWb, 'Daily Shop Tuning v4.xlsx');
 
-console.log('\n✅ Generated: Daily Shop Tuning v2.xlsx');
+console.log('\n✅ Generated: Daily Shop Tuning v4.xlsx');
 console.log(`Total rows: ${outputData.length}`);
